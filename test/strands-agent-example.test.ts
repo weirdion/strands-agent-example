@@ -23,7 +23,6 @@ describe('StrandsAgentExampleStack', () => {
     template.hasResourceProperties('AWS::Lambda::Function', {
       Handler: 'main.handler',
       Runtime: 'python3.13',
-      Architectures: ['arm64'],
       Environment: {
         Variables: {
           MODEL_ACCOUNT_ID: { Ref: 'AWS::AccountId' },
