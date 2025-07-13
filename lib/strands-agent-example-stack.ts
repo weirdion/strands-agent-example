@@ -1,7 +1,9 @@
 import * as cdk from 'aws-cdk-lib';
-import { Function, Runtime, Code, LayerVersion } from 'aws-cdk-lib/aws-lambda';
+import { Function, Runtime, Code, LayerVersion, Architecture } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import { LambdaIntegration, LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { RemovalPolicy } from 'aws-cdk-lib';
 
 export interface StrandsAgentExampleStackProps extends cdk.StackProps {
 }
@@ -16,6 +18,7 @@ export class StrandsAgentExampleStack extends cdk.Stack {
       code: Code.fromAsset('lambda/layer'),
       compatibleRuntimes: [Runtime.PYTHON_3_12, Runtime.PYTHON_3_13],
       description: 'Python dependencies for Strands Agent Example',
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
     // lambda function
@@ -28,6 +31,11 @@ export class StrandsAgentExampleStack extends cdk.Stack {
         MODEL_ACCOUNT_ID: cdk.Stack.of(this).account,
         MODEL_REGION: cdk.Stack.of(this).region,
       },
+      logGroup: new LogGroup(this, 'StrandsAgentExampleLambdaLogGroup', {
+        logGroupName: `/aws/lambda/${this.stackName}-StrandsAgentExampleLambda`,
+        removalPolicy: RemovalPolicy.DESTROY,
+        retention: RetentionDays.ONE_WEEK,
+      }),
     });
 
     // api gateway
@@ -42,7 +50,7 @@ export class StrandsAgentExampleStack extends cdk.Stack {
 
     const items = api.root.addResource('invoke');
     items.addMethod('POST', new LambdaIntegration(apiLambda), {
-      apiKeyRequired: false,
+      apiKeyRequired: false,  // ONLY for example - FIX THIS in PROD
     });
   }
 }
