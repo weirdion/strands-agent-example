@@ -3,15 +3,12 @@ from strands import Agent
 
 logger = Logger("strands-agent-example")
 
-agent = Agent()
+agent = Agent(model="us.anthropic.claude-3-7-sonnet-20250219-v1:0")
 
 def invoke_agent(prompt: str) -> str:
     """
     Function to invoke the agent with a given prompt.
     """
-    logger.info("Invoking agent with prompt: ", agent.model.config)
-    logger.info(f"Invoking agent with prompt: {prompt}")
-    response = agent.invoke(prompt)
+    response = agent(prompt)
     logger.info(f"Agent response: {response}")
-    return response
-
+    return response.message
