@@ -4,6 +4,7 @@ import { Construct } from 'constructs';
 import { LambdaIntegration, LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { RemovalPolicy } from 'aws-cdk-lib';
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 
 export interface StrandsAgentExampleStackProps extends cdk.StackProps {
 }
@@ -27,16 +28,21 @@ export class StrandsAgentExampleStack extends cdk.Stack {
       code: Code.fromAsset('app'),
       handler: 'main.handler',
       layers: [pythonStrandsLayer],
-      environment: {
-        MODEL_ACCOUNT_ID: cdk.Stack.of(this).account,
-        MODEL_REGION: cdk.Stack.of(this).region,
-      },
       logGroup: new LogGroup(this, 'StrandsAgentExampleLambdaLogGroup', {
         logGroupName: `/aws/lambda/${this.stackName}-StrandsAgentExampleLambda`,
         removalPolicy: RemovalPolicy.DESTROY,
         retention: RetentionDays.ONE_WEEK,
       }),
     });
+    // allow lambda to access the model
+    apiLambda.addToRolePolicy(new PolicyStatement({
+      actions: [
+        'bedrock:InvokeModelWithResponseStream',
+      ],
+      resources: [
+        `arn:aws:bedrock:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:inference-profile/us.anthropic.claude-3-7-sonnet-20250219-v1:0`
+      ],
+    }));
 
     // api gateway
     const api = new LambdaRestApi(this, 'StrandsAgentExampleApi', {
