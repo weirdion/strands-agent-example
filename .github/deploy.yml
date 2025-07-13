@@ -1,0 +1,58 @@
+name: "Deploy main branch"
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 'lts'
+        cache: 'npm'
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+        cache: 'poetry'
+
+    - name: Install poetry
+      run: |-
+        pipx install poetry
+        pipx ensurepath
+
+    - name: Install dependencies
+      run: |
+        npm install -g aws-cdk
+        npm install
+        poetry install --only main
+
+    - name: Create lambda layer
+      run: make layer
+
+    - name: Run tests
+      run: npm test
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        aws-region: us-east-1
+        role-session-name: GithubActions
+
+    - name: CDK Deploy
+      run: cdk deploy --all --require-approval never
+      env:
+        AWS_REGION: us-east-1
