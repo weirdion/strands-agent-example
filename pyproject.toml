@@ -1,0 +1,40 @@
+[project]
+name = "strands-agent-example"
+version = "0.1.0"
+description = "Example project for creating a personal agentic AI with Strands"
+authors = [
+    {name = "Ankit Patterson",email = "dev@weirdion.com"}
+]
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.9,<4.0.0"
+dependencies = [
+    "aws-lambda-powertools (>=3.16.0,<4.0.0)",
+    "pydantic (>=2.11.7,<3.0.0)",
+    "requests (>=2.32.4,<3.0.0)"
+]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.1"
+black = "^25.1.0"
+isort = "^6.0.1"
+
+[tool.poetry]
+package-mode = false
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+multi_line_output = 3
+ensure_newline_before_comments = true
