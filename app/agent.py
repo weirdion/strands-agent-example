@@ -5,6 +5,7 @@ logger = Logger("strands-agent-example")
 
 agent = Agent(model="us.anthropic.claude-3-7-sonnet-20250219-v1:0")
 
+
 def invoke_agent(prompt: str) -> str:
     """
     Function to invoke the agent with a given prompt.

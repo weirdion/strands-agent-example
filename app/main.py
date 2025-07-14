@@ -1,25 +1,25 @@
 from dataclasses import dataclass
+
+from agent import invoke_agent
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.event_handler import APIGatewayRestResolver
 from aws_lambda_powertools.event_handler.exceptions import BadRequestError
 from aws_lambda_powertools.logging import correlation_paths
-from aws_lambda_powertools.utilities.typing import LambdaContext
 from aws_lambda_powertools.utilities.parser import BaseModel, ValidationError
+from aws_lambda_powertools.utilities.typing import LambdaContext
 from pydantic import Field
-
-from agent import invoke_agent
 
 logger = Logger("strands-agent-example")
 app = APIGatewayRestResolver(enable_validation=True)
+
 
 @dataclass
 class ResponseModel:
     message: str
 
     def to_dict(self) -> dict:
-        return {
-            "message": self.message
-        }
+        return {"message": self.message}
+
 
 @dataclass
 class ErrorResponseModel:
@@ -27,10 +27,8 @@ class ErrorResponseModel:
     message: str
 
     def to_dict(self) -> dict:
-        return {
-            "error": self.error,
-            "message": self.message
-        }
+        return {"error": self.error, "message": self.message}
+
 
 @app.post("/invoke")
 def call_agent() -> dict:
@@ -43,17 +41,15 @@ def call_agent() -> dict:
         if not request_body:
             logger.warning("Empty request body received")
             error_response = ErrorResponseModel(
-                error="missing_body",
-                message="Request body is required"
+                error="missing_body", message="Request body is required"
             )
             raise BadRequestError(error_response.to_dict())
 
-        prompt = request_body.get('prompt')
+        prompt = request_body.get("prompt")
         if prompt is None or not isinstance(prompt, str) or not prompt.strip():
             logger.warning("Empty or invalid prompt received")
             error_response = ErrorResponseModel(
-                error="invalid_prompt",
-                message="The 'prompt' field must be a non-empty string"
+                error="invalid_prompt", message="The 'prompt' field must be a non-empty string"
             )
             raise BadRequestError(error_response.to_dict())
 
@@ -67,7 +63,7 @@ def call_agent() -> dict:
         logger.error(f"Unexpected error processing request: {e}")
         error_response = ErrorResponseModel(
             error="internal_error",
-            message="An unexpected error occurred while processing your request"
+            message="An unexpected error occurred while processing your request",
         )
         raise BadRequestError(error_response.to_dict())
 

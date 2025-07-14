@@ -22,13 +22,14 @@ This project demonstrates a hybrid TypeScript (AWS CDK) and Python (with AWS Pow
 
 ## 🚀 Quickstart
 
-### 1. Install Dependencies
+### 1. Initialize the Project (Recommended for new users)
 
 ```sh
-make install
+make
 ```
 
-- Installs Node/TypeScript and Python dependencies (via Poetry).
+- Installs Node/TypeScript and Python dependencies (via Poetry)
+- Installs the pre-commit hook for lint and test
 
 ### 2. Build the Lambda Layer
 
@@ -45,6 +46,18 @@ npx cdk deploy
 ```
 
 - Deploys the stack: Lambda Layer, Lambda function, and API Gateway.
+
+## 🧹 Pre-commit Hook (via Husky)
+
+This repo uses [Husky](https://typicode.github.io/husky/) to run `make lint-check` and `npm test` before every commit. The hook is installed automatically with `make` or `make setup`.
+
+To (re)install the hook manually:
+
+```sh
+make setup
+```
+
+To customize the hook, edit `.husky/pre-commit`.
 
 ## 🔁 API Usage
 

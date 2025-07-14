@@ -23,11 +23,31 @@ describe('StrandsAgentExampleStack', () => {
     template.hasResourceProperties('AWS::Lambda::Function', {
       Handler: 'main.handler',
       Runtime: 'python3.13',
-      Environment: {
-        Variables: {
-          MODEL_ACCOUNT_ID: { Ref: 'AWS::AccountId' },
-          MODEL_REGION: { Ref: 'AWS::Region' },
-        },
+    });
+  });
+
+  it('grants the Lambda function permission to use Bedrock models', () => {
+    template.hasResourceProperties('AWS::IAM::Policy', {
+      PolicyDocument: {
+        Statement: [
+          {
+            Action: 'bedrock:InvokeModelWithResponseStream',
+            Effect: 'Allow',
+            Resource: {
+              'Fn::Join': [
+                '',
+                [
+                  'arn:aws:bedrock:',
+                  { Ref: 'AWS::Region' },
+                  ':',
+                  { Ref: 'AWS::AccountId' },
+                  ':inference-profile/us.anthropic.claude-3-7-sonnet-20250219-v1:0'
+                ]
+              ]
+            },
+          },
+        ],
+        Version: '2012-10-17',
       },
     });
   });

@@ -1,4 +1,13 @@
-.PHONY: install layer serve
+.PHONY: default install layer serve setup test lint lint-check
+
+.PHONY: default install layer serve setup test lint lint-check
+
+default: init
+
+init: install setup
+
+setup:
+	npm run prepare
 
 install:
 	npm install
