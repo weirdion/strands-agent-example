@@ -41,7 +41,7 @@ export class StrandsAgentExampleStack extends cdk.Stack {
       ],
       resources: [
         `arn:aws:bedrock:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:inference-profile/us.anthropic.claude-3-7-sonnet-20250219-v1:0`,
-        `arn:aws:bedrock:${cdk.Stack.of(this).region}::foundation-model/anthropic.claude-3-7-sonnet-20250219-v1:0`,
+        `arn:aws:bedrock:us-east-2::foundation-model/anthropic.claude-3-7-sonnet-20250219-v1:0`,
       ],
     }));
 

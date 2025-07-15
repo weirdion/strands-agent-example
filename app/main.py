@@ -5,8 +5,6 @@ from aws_lambda_powertools import Logger
 from aws_lambda_powertools.event_handler import APIGatewayRestResolver
 from aws_lambda_powertools.event_handler.exceptions import BadRequestError
 from aws_lambda_powertools.logging import correlation_paths
-from aws_lambda_powertools.utilities.parser import parse as powertools_parse
-from aws_lambda_powertools.utilities.parser.models import APIGatewayProxyEventModel
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from pydantic import BaseModel
 
@@ -55,7 +53,9 @@ def call_agent(prompt_model: PromptModel) -> dict:
         return error_response.to_dict()
     except Exception as e:
         logger.error(f"Error invoking agent: {e}")
-        error_response = ErrorResponseModel(error="AgentInvocationError", message=str(e))
+        error_response = ErrorResponseModel(
+            error="AgentInvocationError", message="Error invoking agent"
+        )
         return error_response.to_dict()
 
     response_model = ResponseModel(message=response)
@@ -64,5 +64,4 @@ def call_agent(prompt_model: PromptModel) -> dict:
 
 @logger.inject_lambda_context(correlation_id_path=correlation_paths.API_GATEWAY_HTTP)
 def handler(event: dict, context: LambdaContext) -> dict:
-    parsed_event = powertools_parse(event=event, model=APIGatewayProxyEventModel)
-    return app.resolve(parsed_event, context)
+    return app.resolve(event, context)

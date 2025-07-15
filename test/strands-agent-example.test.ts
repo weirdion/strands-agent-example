@@ -46,16 +46,7 @@ describe('StrandsAgentExampleStack', () => {
                   ]
                 ]
               },
-              {
-                'Fn::Join': [
-                  '',
-                  [
-                    'arn:aws:bedrock:',
-                    { Ref: 'AWS::Region' },
-                    '::foundation-model/anthropic.claude-3-7-sonnet-20250219-v1:0'
-                  ]
-                ]
-              }
+              'arn:aws:bedrock:us-east-2::foundation-model/anthropic.claude-3-7-sonnet-20250219-v1:0'
             ],
           },
         ],
