@@ -40,7 +40,8 @@ export class StrandsAgentExampleStack extends cdk.Stack {
         'bedrock:InvokeModelWithResponseStream',
       ],
       resources: [
-        `arn:aws:bedrock:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:inference-profile/us.anthropic.claude-3-7-sonnet-20250219-v1:0`
+        `arn:aws:bedrock:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:inference-profile/us.anthropic.claude-3-7-sonnet-20250219-v1:0`,
+        `arn:aws:bedrock:${cdk.Stack.of(this).region}::foundation-model/anthropic.claude-3-7-sonnet-20250219-v1:0`,
       ],
     }));
 

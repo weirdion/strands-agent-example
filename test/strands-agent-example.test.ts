@@ -33,18 +33,30 @@ describe('StrandsAgentExampleStack', () => {
           {
             Action: 'bedrock:InvokeModelWithResponseStream',
             Effect: 'Allow',
-            Resource: {
-              'Fn::Join': [
-                '',
-                [
-                  'arn:aws:bedrock:',
-                  { Ref: 'AWS::Region' },
-                  ':',
-                  { Ref: 'AWS::AccountId' },
-                  ':inference-profile/us.anthropic.claude-3-7-sonnet-20250219-v1:0'
+            Resource: [
+              {
+                'Fn::Join': [
+                  '',
+                  [
+                    'arn:aws:bedrock:',
+                    { Ref: 'AWS::Region' },
+                    ':',
+                    { Ref: 'AWS::AccountId' },
+                    ':inference-profile/us.anthropic.claude-3-7-sonnet-20250219-v1:0'
+                  ]
                 ]
-              ]
-            },
+              },
+              {
+                'Fn::Join': [
+                  '',
+                  [
+                    'arn:aws:bedrock:',
+                    { Ref: 'AWS::Region' },
+                    '::foundation-model/anthropic.claude-3-7-sonnet-20250219-v1:0'
+                  ]
+                ]
+              }
+            ],
           },
         ],
         Version: '2012-10-17',
