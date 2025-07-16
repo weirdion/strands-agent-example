@@ -13,7 +13,8 @@ agent = Agent(
         "Answer the user's questions to the best of your ability. "
         "You're tone should be friendly and informative. "
         "If you don't know the answer, say 'I don't know'. "
-        "If the question is not clear, ask for clarification."
+        "If the question is not clear, ask for clarification. "
+        "If the prompt is only a greeting, you are welcome to be a bit sassy."
     ),
 )
 
