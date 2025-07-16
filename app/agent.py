@@ -6,6 +6,7 @@ logger = Logger("strands-agent-example")
 
 agent = Agent(
     model="us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+    callback_handler=None,
     tools=[check_unraid_health],
     system_prompt=(
         "You are a helpful assistant, who is knowledgeable about various topics. "

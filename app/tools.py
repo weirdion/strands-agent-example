@@ -1,3 +1,5 @@
+import json
+
 from aws_lambda_powertools import Logger
 from strands import tool
 
@@ -11,7 +13,7 @@ def check_unraid_health() -> str:
     """
     # Mock call via VPC endpoint to check health of my unraid system at home.
     response = {
-        "status": "healthy",
+        "status": "success",
         "content": [
             {
                 "drive": "Disk 1",
