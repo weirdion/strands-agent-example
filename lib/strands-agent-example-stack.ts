@@ -27,6 +27,7 @@ export class StrandsAgentExampleStack extends cdk.Stack {
       runtime: Runtime.PYTHON_3_13,
       code: Code.fromAsset('app'),
       handler: 'main.handler',
+      timeout: cdk.Duration.seconds(30),
       layers: [pythonStrandsLayer],
       logGroup: new LogGroup(this, 'StrandsAgentExampleLambdaLogGroup', {
         logGroupName: `/aws/lambda/${this.stackName}-StrandsAgentExampleLambda`,
